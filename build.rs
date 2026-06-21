@@ -399,16 +399,6 @@ fn build_v8(is_asan: bool) {
       maybe_install_sysroot("amd64");
     }
   }
-  if target_arch == "loongarch64" {
-    gn_args.push(r#"target_cpu="loong64""#.to_string());
-    // Cross compiling needs to set v8_target_cpu
-    gn_args.push(r#"v8_target_cpu="loong64""#.to_string());
-    if target_os == "linux" {
-      gn_args.push("use_sysroot=true".to_string());
-      maybe_install_sysroot("loong64");
-      maybe_install_sysroot("amd64");
-    }
-  }
   if target_arch == "powerpc64le" {
     gn_args.push(r#"target_cpu="ppc64""#.to_string());
     // Cross compiling needs to set v8_target_cpu

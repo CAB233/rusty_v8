@@ -130,18 +130,6 @@ jobs:
           #   v8_enable_pointer_compression: false
           #   cargo: cargo
 
-          - os: ${{ github.repository == 'denoland/rusty_v8' && 'ubuntu-24.04-xl' || 'ubuntu-24.04' }}
-            target: loongarch64-unknown-linux-gnu
-            variant: debug
-            v8_enable_pointer_compression: false
-            cargo: cargo
-
-          - os: ${{ github.repository == 'denoland/rusty_v8' && 'ubuntu-24.04-xl' || 'ubuntu-24.04' }}
-            target: loongarch64-unknown-linux-gnu
-            variant: release
-            v8_enable_pointer_compression: false
-            cargo: cargo
-
           - os: ${{ github.repository == 'denoland/rusty_v8' && 'ubuntu-22.04-xl' || 'ubuntu-22.04' }}
             target: powerpc64le-unknown-linux-gnu
             variant: debug
@@ -224,20 +212,6 @@ jobs:
           #   v8_enable_pointer_compression: false
           #   simdutf: true
           #   cargo: cargo
-
-          - os: ${{ github.repository == 'denoland/rusty_v8' && 'ubuntu-24.04-xl' || 'ubuntu-24.04' }}
-            target: loongarch64-unknown-linux-gnu
-            variant: debug
-            v8_enable_pointer_compression: false
-            simdutf: true
-            cargo: cargo
-
-          - os: ${{ github.repository == 'denoland/rusty_v8' && 'ubuntu-24.04-xl' || 'ubuntu-24.04' }}
-            target: loongarch64-unknown-linux-gnu
-            variant: release
-            v8_enable_pointer_compression: false
-            simdutf: true
-            cargo: cargo
 
           - os: ${{ github.repository == 'denoland/rusty_v8' && 'ubuntu-22.04-xl' || 'ubuntu-22.04' }}
             target: powerpc64le-unknown-linux-gnu
@@ -330,23 +304,6 @@ jobs:
           echo "CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER=/usr/bin/riscv64-linux-gnu-gcc-10" >> ${GITHUB_ENV}
           echo "QEMU_LD_PREFIX=/usr/riscv64-linux-gnu" >> ${GITHUB_ENV}
 
-      - name: Install cross compilation toolchain (loongarch64)
-        if: matrix.config.target == 'loongarch64-unknown-linux-gnu'
-        run: |
-          rustup target add loongarch64-unknown-linux-gnu
-
-          sudo apt update
-          sudo apt install -yq --no-install-suggests --no-install-recommends \
-            binfmt-support g++-13-loongarch64-linux-gnu \
-            gcc-13-loongarch64-linux-gnu libc6-loong64-cross qemu-user \
-            qemu-user-binfmt
-
-          sudo ln -sf /usr/loongarch64-linux-gnu/lib/ld-linux-loongarch-lp64d.so.1 \
-                     /lib/ld-linux-loongarch-lp64d.so.1
-
-          echo "CARGO_TARGET_LOONGARCH64_UNKNOWN_LINUX_GNU_LINKER=/usr/bin/loongarch64-linux-gnu-gcc-13" >> ${GITHUB_ENV}
-          echo "QEMU_LD_PREFIX=/usr/loongarch64-linux-gnu" >> ${GITHUB_ENV}
-
       - name: Install cross compilation toolchain (powerpc64le)
         if: matrix.config.target == 'powerpc64le-unknown-linux-gnu'
         run: |
@@ -400,7 +357,6 @@ jobs:
                # Unlike aarch64, the riscv64 sccache binary is not static, so use the host architecture one.
                "riscv64gc-unknown-linux-gnu" = "x86_64-unknown-linux-musl"
                # Same as riscv64.
-               "loongarch64-unknown-linux-gnu" = "x86_64-unknown-linux-musl"
                "powerpc64le-unknown-linux-gnu" = "x86_64-unknown-linux-musl"
                "x86_64-pc-windows-msvc"    = "x86_64-pc-windows-msvc"
              }['${{ matrix.config.target }}']
