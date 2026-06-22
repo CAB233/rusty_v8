@@ -304,14 +304,13 @@ jobs:
           SCCACHE_CACHE_SIZE: 256M
           SCCACHE_IDLE_TIMEOUT: 0
         run: |
-          $version = "v0.8.2"
+          $version = "v0.16.0"
           $platform =
             @{ "x86_64-apple-darwin"       = "x86_64-apple-darwin"
                "aarch64-apple-darwin"      = "aarch64-apple-darwin"
                "x86_64-unknown-linux-gnu"  = "x86_64-unknown-linux-musl"
                "aarch64-unknown-linux-gnu" = "aarch64-unknown-linux-musl"
-               # Unlike aarch64, the riscv64 sccache binary is not static, so use the host architecture one.
-               "riscv64gc-unknown-linux-gnu" = "x86_64-unknown-linux-musl"
+               "riscv64gc-unknown-linux-gnu" = "riscv64gc-unknown-linux-musl"
                "x86_64-pc-windows-msvc"    = "x86_64-pc-windows-msvc"
              }['${{ matrix.config.target }}']
           $basename = "sccache-$version-$platform"
